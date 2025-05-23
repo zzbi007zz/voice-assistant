@@ -45,19 +45,27 @@ export const useSpeechSynthesis = (): SpeechSynthesisHook => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'vi-VN'; // MODIFIED: Set language to Vietnamese
 
-    // Attempt to find a Vietnamese female voice
-    const vietnameseFemaleVoice = voices.find(
-      voice => voice.lang.toLowerCase().startsWith('vi') && voice.name.toLowerCase().includes('female')
+    // Attempt to find the specific "Zephyr" voice (assuming it's female and Vietnamese)
+    const zephyrVoice = voices.find(
+      voice => voice.name.toLowerCase().includes('zephyr') && voice.lang.toLowerCase().startsWith('vi')
     );
-    // Fallback to any Vietnamese voice if specific female not found
-    const vietnameseVoice = voices.find(voice => voice.lang.toLowerCase().startsWith('vi'));
+    // Fallback to any Vietnamese female voice
+    const vietnameseFemaleVoice = voices.find(
+      voice => voice.lang.toLowerCase().startsWith('vi') && voice.name.toLowerCase().includes('female') && voice !== zephyrVoice
+    );
+    // Fallback to any Vietnamese voice
+    const vietnameseVoice = voices.find(
+        voice => voice.lang.toLowerCase().startsWith('vi') && voice !== zephyrVoice && voice !== vietnameseFemaleVoice
+    );
 
-    if (vietnameseFemaleVoice) {
+    if (zephyrVoice) {
+      utterance.voice = zephyrVoice;
+    } else if (vietnameseFemaleVoice) {
       utterance.voice = vietnameseFemaleVoice;
     } else if (vietnameseVoice) {
       utterance.voice = vietnameseVoice;
     }
-    // If no specific Vietnamese voice is found, it will use the browser's default for 'vi-VN' or a fallback.
+    // If no specific voice is found, it will use the browser's default for 'vi-VN' or a fallback.
     
     utterance.onstart = () => {
       setIsSpeaking(true);

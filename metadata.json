@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Voice AI Assistant on Web",
+  "description": "A voice-controlled AI assistant that can answer questions, provide news summaries, and search the web using Gemini API and browser speech capabilities.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
